@@ -3,8 +3,8 @@
 </p>
 <h1 align="center">docsify-demo</h1>
 
-[GitHub](https://https://github.com/dongyzzzz/)
-[开始阅读](#小小知识库)
+[GitHub](https://github.com/dongyzzzz)
+[开始阅读](https://dongyzzzz.github.io/course-of-growth/#/./docs/a-1demo)
 
 
 
