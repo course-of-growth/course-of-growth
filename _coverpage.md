@@ -1,5 +1,5 @@
 <p align="center">
-<img src="http://pic.netbian.com/uploads/allimg/190824/205524-1566651324f88b.jpg" width="400" height="500"/>
+<img src="http://pic.netbian.com/uploads/allimg/190824/205524-1566651324f88b.jpg" width="500" height="400"/>
 </p>
 <h1 align="center">docsify-demo</h1>
 
