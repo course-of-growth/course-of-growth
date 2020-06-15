@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://dyzzz.oss-cn-beijing.aliyuncs.com/img/github-blog-cover.jpg" width="700" height="500"/>
+<img src="https://dyzzz.oss-cn-beijing.aliyuncs.com/img/github-blog-cover.jpg" width="600" height="400"/>
 </p>
 <h1 align="center">小小知识库</h1>
 
