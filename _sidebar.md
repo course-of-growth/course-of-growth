@@ -2,7 +2,7 @@
 * Java
 
   * [Java基础](./docs/a-1demo.md)
-  * [JVM](./docs/jvm.md)
+  * [JVM](./docs/Java/jvm.md)
 
 * 数据库
 
@@ -32,7 +32,7 @@
 
 * 阅读心得
 
-  * [DDD](./docs/ddd.md)
+  * [DDD](./docs/DDD/ddd.md)
 
   
 
