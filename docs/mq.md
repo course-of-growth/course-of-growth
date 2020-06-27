@@ -83,6 +83,23 @@
 - 增加了系统的复杂度
 - 可能会出现数据一致性问题
 
+参考：
+```
+Understanding When to use RabbitMQ or Apache Kafka ，什么时候使用 RabbitMQ，什么时候使用 Kafka，通过这篇文章可以让你明白如何做技术决策。
+Trello: Why We Chose Kafka For The Trello Socket Architecture ，Trello 的 Kafka 架构分享。
+LinkedIn: Running Kafka At Scale ，LinkedIn 公司的 Kafka 架构扩展实践。
+Should You Put Several Event Types in the Same Kafka Topic? ，这个问题可能经常困扰你，这篇文章可以为你找到答案。
+Billions of Messages a Day - Yelp’s Real-time Data Pipeline ，Yelp 公司每天十亿级实时消息的架构。
+Uber: Building Reliable Reprocessing and Dead Letter Queues with Kafka ，Uber 公司的 Kafka 应用。
+Uber: Introducing Chaperone: How Uber Engineering Audits Kafka End-to-End ，Uber 公司对 Kafka 消息的端到端审计。
+Publishing with Apache Kafka at The New York Times ，纽约时报的 Kafka 工程实践。
+Kafka Streams on Heroku ，Heroku 公司的 Kafka Streams 实践。
+Salesforce: How Apache Kafka Inspired Our Platform Events Architecture ，Salesforce 的 Kafka 工程实践。
+Exactly-once Semantics are Possible: Here’s How Kafka Does it ，怎样用 Kafka 让只发送一次的语义变为可能。这是业界中一个很难的工程问题。
+Delivering billions of messages exactly once 同上，这也是一篇挑战消息只发送一次这个技术难题的文章。
+Benchmarking Streaming Computation Engines at Yahoo!。Yahoo! 的 Storm 团队在为他们的流式计算做技术选型时，发现市面上缺乏针对不同计算平台的性能基准测试。于是，他们研究并设计了一种方案来做基准测试，测试了 Apache Flink、Apache Storm 和 Apache Spark 这三种平台。文中给出了结论和具体的测试方案。（如果原文链接不可用，请尝试搜索引擎对该网页的快照。） 
+```
+
 ## 二.如何选择消息队列
 常见的消息队列中间件有很多，每一种产品都有自己的优缺点，所以就需要根据现有系统的情况，选择最合适的产品。
 一个合格的消息队列中间件，必须具备一下几个特性：
@@ -116,7 +133,7 @@ RabbitMQ客户端支持的编程语言大概是所有消息队列中最多的。
 
 RocketMQ是阿里开源的消息队列产品，之后建赠与Apache软件基金会，有着不错的性能，稳定性和可靠性，具备一个现代消息队列应该有的几乎所有的功能和特性，并且他还在持续的成长中。
 
-Rocket有非常活跃的中文社区，大多数的问题可以直接找到中文答案。此外，RocketMQ使用Java语言开发的，可以更容易对其进行二次开发或拓展。
+RocketMQ有非常活跃的中文社区，大多数的问题可以直接找到中文答案。此外，RocketMQ使用Java语言开发的，可以更容易对其进行二次开发或拓展。
 
 RocketMQ对在线业务的响应延时做了很多的优化，大多数情况下都可以做到毫秒级的响应。如果应用场景很`在意响应延时`的话，就应该选择RocketMQ。
 
@@ -151,7 +168,11 @@ Pulsar,新兴的开源消息队列产品，最早由Yahoo开发，目前处于�
 
 系统使用消息队列的场景主要是处理在线业务，比如交易系统中用消息队列传递订单，可以使用RocketMQ，因为其低延迟和金融级的稳定性。
 
-系统需要处理海量的消息，比如手机日志、监控信息或者前端的埋点这类数据，或是应用场景大量使用了大数据、流计算相关的开源产品，kafka是最适合的消息队列。
+系统需要处理海量的消息，比如手机日志、监控信息或者前端的埋点这类数据，或是应用场景大量使用了大数据、流计算相关的开源产品，kafka是最适合的消息队列。 	 	 	 
+ 	 	 	 	 	 
+参考地址  ：https://blog.csdn.net/belvine/article/details/80842240   
+
+ 
 
 ## 三.消息模型
 每一款消息队列都有自己的一套消息模型，比如说队列（Queue）、主题（Topic）或者是分区（Partition）这些名词概念，在每个消息队列模型中都会涉及一些，含义还不太一样。
@@ -285,3 +306,15 @@ Kafka的解决方案比较简单粗暴，直接抛出异常，让用户自行解
 ![image](https://dyzzz.oss-cn-beijing.aliyuncs.com/img/07.png)
 
 参考 https://rocketmq.apache.org/docs/transaction-example/
+
+## 五.如何保证消息不丢失
+现在主流的消息队列产品都提供了非常完善的消息可靠性机制，完全可以做到在消息传递的过程中，即使网络中断或者硬件故障，也能确保消息的可靠传输，不丢失消息。
+
+绝大部分丢消息的原因都是由于开发者不熟悉消息队列，没有正确的使用和配置消息队列导致的。虽然不同的消息队列提供的API不一样，相关的配置项也不同，但是在保证消息可靠性传递这方面，它们实现原理是一样的。
+
+### 检测消息丢失的方法
+
+一个IT基础设施比较完善的公司，一般都有分布式链路系统，使用类似的追踪系统可以很方便地追踪每一条消息。
+
+`我们可以利用消息队列的有序性来验证是否有消息丢失`。
+
