@@ -335,3 +335,7 @@ Consumer 实例的数量最好和分区的数量一致，做到Consumer和分区
 一条消息从生产到消费完成这个过程，可以划分为三个阶段：
 
 ![image](https://dyzzz.oss-cn-beijing.aliyuncs.com/img/mq07png)
+
+- 生产阶段：在这个阶段，从消息在Producer创建出来，经过网络传输发送给Broker端。
+- 存储阶段：在这个阶段，消息在Broker端存储，如果是集群，消息会在这个阶段复制到其他副本上。
+- 消费阶段：在这个阶段，Consumer从Broker上拉取消息，经过网络传输发送到Consumer上。
