@@ -16,7 +16,7 @@
 
 * 数据结构与算法
 
-  * [MySQL](./docs/a-1/demo.md)
+  * [数据结构](./docs/Data/demo.md)
 
 * 操作系统
 
