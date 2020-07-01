@@ -18,7 +18,7 @@
 
   * [数据结构](./docs/Data/demo.md)
 
-* DevOPS
+* DevOps
 
   * [Java基础](./docs/a-1demo.md)
 

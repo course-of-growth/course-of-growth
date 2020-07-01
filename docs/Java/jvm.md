@@ -232,6 +232,107 @@ class 奸商 extends 商户 {
 
 在静态方法“价格歧视”中，我们会调用 Random 类的构造器。该调用会被编译为 invokespecial 指令。然后我们会以这个新建的 Random 对象为调用者，调用 Random 类中的 nextDouble 方法。该调用会被编译为 invokevirutal 指令。
 
+对于invokestatic 以及invokespecial而言，Java虚拟机能够直接识别具体的目标方法。
+
+但是对于invokevirtual以及invokeinterface而言，在绝大部分情况下，虚拟机需要在执行过程中，根据调用者的动态类型，来确定具体的目标方法。
+
+唯一的例外在于，如果虚拟机能够确定一个目标方法有且仅有一个，比如说目标方法被标记为final，那么它可以不通过动态编译，直接确定目标方法。
+
+参考：
+https://wiki.openjdk.java.net/display/HotSpot/VirtualCalls
+
+https://wiki.openjdk.java.net/display/HotSpot/InterfaceCalls
+
+### 调用指令的符号引用
+
+在编译过程中，我们并不知道目标方法的具体内存地址。因此，Java编译器会暂时用符号引用表示目标方法，这一`符号引用包括目标方法所在的类或接口的名称，以及目标方法的方法名和方法描述符`。
+
+符号引用存储在class文件的常量池中。根据目标方法是否为接口方法，这些引用可分为接口符号引用和非接口符号引用。利用`javap -v`可以打印某个类的常量池。
+```
+// 在奸商.class 的常量池中，#16 为接口符号引用，指向接口方法 " 客户.isVIP()"。而 #22 为非接口符号引用，指向静态方法 " 奸商. 价格歧视 ()"。
+$ javap -v 奸商.class ...
+Constant pool:
+...
+  #16 = InterfaceMethodref #27.#29        // 客户.isVIP:()Z
+...
+  #22 = Methodref          #1.#33         // 奸商. 价格歧视:()D
+...
+```
+
+在执行使用了符号引用的字节码前，Java虚拟机需要解析这些符号引用，并替换为实际引用。
+
+`1.1 对于非接口符号引用`，假设该符号引用所指向的类为C，则Java虚拟机会按照如下步骤查找：
+- 1.在C中查找符合名称以及描述符的方法；
+- 2.如果没有找到，在C的父类中继续查找，直到Object类；
+- 3.如果还是没找到，在C所直接实现或间接实现的接口中搜索，这一步搜索得到的目标方法必须是非私有的、非静态的。而且如果目标方法在间接使用的接口中，则需满足C与该接口之间没有任何其他符合条件的目标方法，如果有多个符合条件的目标方法，则返回其中任意一个。
+
+从这个解析算法可以看出，静态方法也可以通过子类来调用。此外，子类的静态方法会隐藏（与重写不同）父类的同名、同描述符的静态方法。
+
+`1.2 对于接口符号引用`，假设改符号引用所指向的接口为I，则Java虚拟机会按照如下步骤进行查找：
+- 1.在I中查找符合名称以及描述符的方法；
+- 2.如果没有找到，在Object类中的共有实例方法中搜索；
+- 3.如果没有找到，则在I的超接口中搜索。这一步的搜索接口的要求与非接口引用步骤3的要求一致。
+
+经过上述步骤的解析之后，符号引用会被解析成实际引用，对于可以静态绑定的方法调用而言，实际引用是一个指向方法的指针。对于需要动态绑定的方法调用而言，实际引用则是一个方法表的索引。
+
+### 总结一
+
+在Java中，方法存在重载和重写的概念，重载指的是方法名相同而参数类型不同的方法之间的关系，重写指的是方法名相同并且方法参数类型也先沟通的方法之间的关系。
+
+Java虚拟机识别方法的方式略有不同，除了方法名和参数类型之外，它还会考虑返回类型。
+
+在Java虚拟机中，静态绑定指的是在解析时便能够直接识别目标方法的情况，而动态绑定指的是需要在运行过程中根据调用者的动态类型识别目标方法的情况。由于Java编译器已经区分了重载方法，因此可以认为Java虚拟机中不存在重载。
+
+在class文件中，Java编译器会用符号引用指代目标方法，在执行调用指令前，它所附带的符号引用需要被解析成实际引用。对于可以静态绑定的方法调用而言，实际引用为目标方法的指针。而对于需要动态绑定的方法调用而言，实际引用为辅助动态绑定的信息。
+
+Java重写和Java虚拟机的重写不一致。但是编译器会通过桥接方法来弥补。
+
+1.重写方法的返回类型不一致
+
+```java
+interface Customer {
+  boolean isVIP();
+}
+ 
+class Merchant {
+  public Number actionPrice(double price, Customer customer) {
+    ...
+  }
+}
+ 
+class NaiveMerchant extends Merchant {
+  @Override
+  public Double actionPrice(double price, Customer customer) {
+    ...
+  }
+}
+```
+
+2.泛型参数类型导致的方法参数不一致：
+
+```java
+interface Customer {
+  boolean isVIP();
+}
+ 
+class Merchant<T extends Customer> {
+ 	public double actionPrice(double price, T customer) {
+		  ...
+ 	}
+}
+ 
+class VIPOnlyMerchant extends Merchant<VIP> {
+	 @Override
+ 	public double actionPrice(double price, VIP customer) {
+    ...
+ 	}
+}
+```
+
+
+
+
+
 
 
 
