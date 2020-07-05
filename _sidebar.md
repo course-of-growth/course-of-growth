@@ -16,7 +16,7 @@
 
 * 数据结构与算法
 
-  * [数据结构](./docs/Data/demo.md)
+  * [数据结构](./docs/Data/data.md)
 
 * DevOps
 
