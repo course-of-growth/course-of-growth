@@ -20,6 +20,7 @@
 
 * DevOps
 
+  * [理论基础](./docs/DevOps/devops.md)
   * [内建质量](./docs/DevOps/Built-in-quality.md)
 
 * 操作系统
