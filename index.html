@@ -1,54 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>小小知识库</title>
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <meta name="description" content="Description">
   <meta name="viewport"
-  content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-<link rel="stylesheet" href="//unpkg.com/docsify/lib/themes/vue.css">
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <link rel="stylesheet" href="//unpkg.com/docsify/lib/themes/vue.css">
+  <!-- alert 样式 -->
+  <link rel="stylesheet" href="https://cdn.bootcss.com/sweetalert/1.1.3/sweetalert.min.css" type='text/css'
+    media='all' />
 </head>
 
 <body>
-<div id="app"></div>
-<!-- docsify-edit-on-github -->
-<script src="//unpkg.com/docsify-edit-on-github/index.js"></script>
-<script>
-  window.$docsify = {
-    name: '小小知识库',
-    repo: 'https://github.com/dongyzzzz/course-of-growth',
-    maxLevel: 5,//最大支持渲染的标题层级
-    subMaxLevel: 3,
-    homepage: 'README.md',
-    coverpage: true,
-    loadSidebar: true,
-    auto2top: true,//切换页面后是否自动跳转到页面顶部
-    //全文搜索
-    search: {
-      //maxAge: 86400000, // 过期时间，单位毫秒，默认一天
-      paths: 'auto',
-      placeholder: '搜索',
-      noData: '找不到结果',
-      // 搜索标题的最大程级, 1 - 6
-      depth: 3,
-    },
-    plugins: [
-      EditOnGithubPlugin.create('https://github.com/dongyzzzz/course-of-growth/blob/master/')
-    ],
-  }
-</script>
-<script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
-<!--Java代码高亮-->
-<script src="//unpkg.com/prismjs/components/prism-java.js"></script>
-<!--全文搜索,直接用官方提供的无法生效-->
-<script src="https://cdn.bootcss.com/docsify/4.5.9/plugins/search.min.js"></script>
-<!-- 复制到剪贴板 -->
-<script src="//unpkg.com/docsify-copy-code"></script>
-<!-- 图片缩放 -->
-<script src="//unpkg.com/docsify/lib/plugins/zoom-image.js"></script>
-<!-- 字数统计 -->
-<script src="//unpkg.com/docsify-count/dist/countable.js"></script>
+  <div id="app"></div>
+  <!-- docsify-edit-on-github -->
+  <script src="//unpkg.com/docsify-edit-on-github/index.js"></script>
+  <script>
+    window.$docsify = {
+      name: '小小知识库',
+      repo: 'https://github.com/dongyzzzz/course-of-growth',
+      maxLevel: 5,//最大支持渲染的标题层级
+      subMaxLevel: 3,
+      homepage: 'README.md',
+      coverpage: true,
+      loadSidebar: true,
+      auto2top: true,//切换页面后是否自动跳转到页面顶部
+      //全文搜索
+      search: {
+        //maxAge: 86400000, // 过期时间，单位毫秒，默认一天
+        paths: 'auto',
+        placeholder: '搜索',
+        noData: '找不到结果',
+        // 搜索标题的最大程级, 1 - 6
+        depth: 3,
+      },
+      plugins: [
+        EditOnGithubPlugin.create('https://github.com/dongyzzzz/course-of-growth/blob/master/')
+      ],
+      footer: {
+        copy: '<span>Copyright &copy; 2020</span>',
+        auth: ' <a href="https://github.com/dongyzzzz/course-of-growth" target="_blank">🏷️ dyzzz Blog</a>',
+        pre: '<hr/>',
+        style: 'text-align: left;',
+      },//添加页脚
+
+    }
+  </script>
+  <script src="//unpkg.com/docsify-footer-enh/dist/docsify-footer-enh.min.js"></script>
+  <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
+  <!-- mouse click -->
+  <script src="//cdn.jsdelivr.net/gh/jerryc127/butterfly_cdn@2.1.0/js/click_heart.js"></script>
+
+  <!--Java代码高亮-->
+  <script src="//unpkg.com/prismjs/components/prism-java.js"></script>
+  <!--全文搜索,直接用官方提供的无法生效-->
+  <script src="https://cdn.bootcss.com/docsify/4.5.9/plugins/search.min.js"></script>
+  <!-- 复制到剪贴板 -->
+  <script src="//unpkg.com/docsify-copy-code"></script>
+  <!-- 图片缩放 -->
+  <script src="//unpkg.com/docsify/lib/plugins/zoom-image.js"></script>
+  <!-- 字数统计 -->
+  <script src="//unpkg.com/docsify-count/dist/countable.js"></script>
+
+  <script src="https://eqcn.ajz.miesnfu.com/wp-content/plugins/wp-3d-pony/live2dw/lib/L2Dwidget.min.js"></script>
+  <script>
+      L2Dwidget.init({
+        "model": {
+          //jsonpath控制显示那个小萝莉模型，
+          //(切换模型需要改动)
+          jsonPath: "https://unpkg.com/live2d-widget-model-shizuku@1.0.5/assets/shizuku.model.json",
+          "scale": 1
+        },
+        "display": {
+          "position": "right", //看板娘的表现位置
+          "width": 70,  //小萝莉的宽度
+          "height": 140, //小萝莉的高度
+          "hOffset": 35,
+          "vOffset": -20
+        },
+        "mobile": {
+          "show": true,
+          "scale": 0.5
+        },
+        "react": {
+          "opacityDefault": 0.7,
+          "opacityOnHover": 0.2
+        }
+      });
+  </script>
+
+  <!-- 实现离线化 -->
+  <script>
+    if (typeof navigator.serviceWorker !== 'undefined') {
+      navigator.serviceWorker.register('pwa.js')
+    }
+  </script>
+
+  <!-- 复制提醒 -->
+  <script src="https://cdn.bootcss.com/sweetalert/1.1.3/sweetalert.min.js"></script>
+  <script>
+    document.body.oncopy = function () {
+      swal("复制成功",
+        "😘",
+        "success");
+    };
+  </script>
+
+
 </body>
 
 </html>
