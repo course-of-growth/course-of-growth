@@ -19,9 +19,12 @@
   * [数据结构](./docs/Data/data.md)
 
 * DevOps
-
-  * [理论基础](./docs/DevOps/devops.md)
+  * [Linux](./docs/DevOps/linux.md)
+  * [DevOps](./docs/DevOps/devops.md)
+  * [docker](./docs/DevOps/docker.md)
+  * [微服务](./docs/DevOps/micro-services.md)
   * [内建质量](./docs/DevOps/Built-in-quality.md)
+
 
 * 操作系统
 
