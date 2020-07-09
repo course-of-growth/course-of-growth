@@ -109,7 +109,7 @@ yum list installed | grep docker
 
 >安装docker
 ```
-yunm -y install docker
+yum -y install docker
 ```
 
 注：-y 表示不询问安装，直到安装成功
