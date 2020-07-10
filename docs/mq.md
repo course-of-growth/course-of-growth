@@ -728,11 +728,59 @@ Transfer(accountFrom, accountTo, amount) {
 
 如果请求速度超过这个值，那么请求就不能马上处理，只能阻塞或者排队，这时候Transfer服务的响应时延由100ms延长到了：排队的等待时延 + 处理时延（100ms）。也就是说，在大量请求的情况下，我们的微服务平均相应时延就长了。
 
+这是不是已经到了这台服务器所能承受的极限了呢？其实远远没有，如果我们检测一下服务器的各项指标，会发现无论是CPU、内存、还是网卡流量或者是磁盘的IO都空闲的很，那我们Transfer服务中的那10000个线程在干什么呢？对，绝大部分线程都在等待服务Add服务返回结果。
 
+也就是说，`采用同步实现的方式，这个服务器的所有线程大部分时间都没有在工作，而是都在等待`。
 
+如果我们能减少或者避免这种无意义的等待，就可以大幅度提升服务的吞吐能力，从而提升服务的总体性能。
 
+**2.采取异步实现解决等待问题**
 
+实现同样的业务逻辑，可以采用异步的思想来解决这个问题：
+```
+TransferAsync(accountFrom, accountTo, amount, OnComplete()) {
+  // 异步从 accountFrom 的账户中减去相应的钱数，然后调用 OnDebit 方法。
+  AddAsync(accountFrom, -1 * amount, OnDebit(accountTo, amount, OnAllDone(OnComplete())))
+}
+// 扣减账户 accountFrom 完成后调用
+OnDebit(accountTo, amount, OnAllDone(OnComplete())) {
+  //  再异步把减去的钱数加到 accountTo 的账户中，然后执行 OnAllDone 方法
+  AddAsync(accountTo, amount, OnAllDone(OnComplete()))
+}
+// 转入账户 accountTo 完成后调用
+OnAllDone(OnComplete()) {
+  OnComplete()
+}
+```
 
+通过上面的代码可以发现，TransferAsync 服务比 Transfer 多了一个参数，并且这个参数传入的是一个回调方法 OnComplete()（虽然Java语言并不支持将方法作为方法参数传递，但是像JavaScript等很多语言都具有这样的特性，在Java语言中，也可以通过传入一个回调类的实例来变相实现类似的功能）。
+
+这个TransferAsync() 方法的语义是：请帮我执行转账操作，当转账完成后，请调用OnComplete()方法。调用TransferAsync 的线程不必等待转账完成就可以立即返回了，待转账结束后，TransferService自然会调用OnComplete()方法来执行转账后续的工作。
+
+异步的实现过程相对于同步来说，稍微有点复杂。我们先定义2个回调方法：
+
+- OnDebit():扣减完成后调用地回调方法。
+- OnAllDone():转入账户完成后调用的回调方法。
+
+这个异步实现的语义相当于：
+
+- 1.异步从 accountFrom 的账户中减去响应的钱数，然后调用OnDebit方法；
+- 2.在OnDebit方法中，异步减去的钱数加到accountTp 的账户上，然后执行 OnAllDone 方法；
+- 3.在OnAllDone 方法中，调用 OnComplete 方法。
+
+绘制成时序图就是这样：
+
+![image](https://dyzzz.oss-cn-beijing.aliyuncs.com/img/mq202007101748.jpg)
+
+异步化实现后，整个流程的时序和同步实现是完全一样的，区别只是`在线程模型上由同步顺序调用改为了异步调用和回调机制`。
+
+接下来我们分析一下异步实现的性能，由于流程的时序和同步实现是一样，在低请求数量的场景下，平均响应时延一样是 100ms。在超高请求数量场景下，异步的实现不再需要线程等待执行结果，只需要个位数量的线程，即可实现同步场景大量线程一样的吞吐量。
+
+由于没有了线程的数量的限制，总体吞吐量上限会大大超过同步实现，并且在服务器 CPU、网络带宽资源达到极限之前，响应时延不会随着请求数量增加而显著升高，几乎可以一直保持约 100ms 的平均响应时延。
+
+### 简单实用的异步框架：CompletebaleFuture
+
+在实际开发中，我们可以使用异步框架或者响应式框架，来解决一些异步编程问题，简化开发。Java中比较常用的异步框架有Java8内置的CompleteableFuture 和 ReactiveX 的 [RxJava](https://github.com/ReactiveX/RxJava)
 
 
 
