@@ -782,6 +782,27 @@ OnAllDone(OnComplete()) {
 
 在实际开发中，我们可以使用异步框架或者响应式框架，来解决一些异步编程问题，简化开发。Java中比较常用的异步框架有Java8内置的CompleteableFuture 和 ReactiveX 的 [RxJava](https://github.com/ReactiveX/RxJava)
 
+Java8 中新增了一个非常强大的用于异步编程的类：CompletableFuture，几乎囊括了我们在异步开发程序的大部分功能，使用CompletableFuture 很容易编写出优雅且易于维护的异步代码。
+
+接下来，我们来看下，如果用CompletableFuture 实现的转账服务。
+
+首先，我们用 CompletableFuture 定义2个微服务接口：
+
+```Java
+/**
+ * 账户服务
+ */
+public interface AccountService {
+    /**
+     * 变更账户金额
+     * @param account 账户 ID
+     * @param amount 增加的金额，负值为减少
+     */
+    CompletableFuture<Void> add(int account, int amount);
+}
+```
+
+
 
 
 
