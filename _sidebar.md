@@ -26,13 +26,13 @@
   * [内建质量](./docs/DevOps/Built-in-quality.md)
 
 
-* 操作系统
+* 编程基础
 
-  * [Java基础](./docs/a-1demo.md)
+  * [计算机组成原理](./docs/Basics/Principles-of-Computer-Organization.md)
 
-* 计算机网路
+  * [操作系统](./docs/a-1demo.md)
 
-  * [Java基础](./docs/a-1demo.md)
+  * [计算机网络](./docs/a-1demo.md)
 
 * Golang
 
