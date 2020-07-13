@@ -817,8 +817,58 @@ public interface TransferService {
 ```
 可以看出这两个接口定义的方法的返回类型都是一个带泛型的CompletableFeture。尖括号中的泛型类型就是真正方法需要返回的数据类型,这两个服务不需要返回数据，所以直接返回void就行。
 
+然后来实现转账服务：
 
+```Java
+/**
+ * 转账服务的实现
+ */
+public class TransferServiceImpl implements TransferService {
+    @Inject
+    private  AccountService accountService; // 使用依赖注入获取账户服务的实例
+    @Override
+    public CompletableFuture<Void> transfer(int fromAccount, int toAccount, int amount) {
+      // 异步调用 add 方法从 fromAccount 扣减相应金额
+      return accountService.add(fromAccount, -1 * amount)
+      // 然后调用 add 方法给 toAccount 增加相应金额
+      .thenCompose(v -> accountService.add(toAccount, amount));    
+    }
+}
+```
 
+在转账服务的实现类TransferServiceImpl 里面，先定义一个AccountService 实例，这个实例是从外部注入进来的。然后实现transfer（）方法的实现，先调用一次账户服务 accountService.add()方法从 fromAccount 扣减响应的金额，因为 add() 方法返回的就是一个 CompletableFeture 对象，可以用 CompletableFeture 的 thenCompose() 方法将下一次调用 accountService.add() 串联起来，实现异步依次调用两次账户服务完整转账。
 
+客户端使用 CompletableFuture 也非常灵活，既可以同步调用，也可以异步调用。
 
+```Java
+public class Client {
+    @Inject
+    private TransferService transferService; // 使用依赖注入获取转账服务的实例
+    private final static int A = 1000;
+    private final static int B = 1001;
+ 
+    public void syncInvoke() throws ExecutionException, InterruptedException {
+        // 同步调用
+        transferService.transfer(A, B, 100).get();
+        System.out.println(" 转账完成！");
+    }
+ 
+    public void asyncInvoke() {
+        // 异步调用
+        transferService.transfer(A, B, 100)
+                .thenRun(() -> System.out.println(" 转账完成！"));
+    }
+}
+```
 
+在调用异步方法获得返回值 CompletableFuture 对象后，既可以调用 CompletableFuture 的 get 方法，像调用同步方法那样等待调用的方法执行结束并获得返回值，也可以像异步回调的方式一样，调用 CompletableFuture 那些以 then 开头的一系列方法，为 CompletableFuture 定义异步方法结束之后的后续操作。比如像上面这个例子中，我们调用 thenRun() 方法，参数就是将转账完成打印在控台上这个操作，这样就可以实现在转账完成后，在控制台打印“转账完成！”了。
+
+**小结**
+
+简单来说，异步思想就是，当我们要执行一项比较耗时的操作时，不去等待操作结束，而是给这个操作一个命令：“当操作完成后，接下来去执行什么。”
+
+使用异步编程模型，虽然并不能加快程序本身的速度，但是可以减少或者避免线程的等待，只用很少的线程就可以达到超高的吞吐能力。
+
+同时我们也需要注意到异步模型的问题：相比于同步实现，异步实现的复杂度要大得多，代码的可读性和可维护性都会显著的下降。虽然使用一些异步框架可以在一定程度上简化异步开发，但是并不能解决异步模型高复杂度的问题。
+
+异步性能虽好，但一定不能滥用，只有类似在像消息队列这种业务逻辑简单并奇瑞需要超高吞吐量的场景下，或者必须长时间等待资源的地方，才考虑使用一步模型。如果系统的业务逻辑比较复杂，在性能能够满足也
