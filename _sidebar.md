@@ -30,9 +30,9 @@
 
   * [计算机组成原理](./docs/Basics/Principles-of-Computer-Organization.md)
 
-  * [操作系统](./docs/a-1demo.md)
+  * [操作系统](./docs/Basics/.md)
 
-  * [计算机网络](./docs/a-1demo.md)
+  * [计算机网络](./docs/Basics/net.md)
 
 * Golang
 
