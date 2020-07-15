@@ -38,6 +38,10 @@
 
   * [Go基础](./docs/go01.md)
 
+* LeetCode
+
+  * [Go基础](./docs/go01.md)
+
 * 阅读心得
 
   * [DDD](./docs/DDD/ddd.md)
