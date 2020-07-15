@@ -2,6 +2,7 @@
 * Java
 
   * [Java基础](./docs/a-1demo.md)
+  * [并发](./docs/a-1demo.md)
   * [JVM](./docs/Java/jvm.md)
 
 * 数据库
@@ -32,7 +33,7 @@
 
   * [操作系统](./docs/Basics/os.md)
 
-  * [计算机网络](./docs/Basics/net.md)
+  * [计算机网络](./docs/Basics/network.md)
 
 * Golang
 
