@@ -30,7 +30,7 @@
 
   * [计算机组成原理](./docs/Basics/Principles-of-Computer-Organization.md)
 
-  * [操作系统](./docs/Basics/.md)
+  * [操作系统](./docs/Basics/os.md)
 
   * [计算机网络](./docs/Basics/net.md)
 
