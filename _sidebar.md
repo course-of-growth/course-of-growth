@@ -21,7 +21,7 @@
 * DevOps
   * [Linux](./docs/DevOps/linux.md)
   * [DevOps](./docs/DevOps/devops.md)
-  * [CICD](./docs/DevOps/devops.md)
+  * [CICD](./docs/DevOps/CICD.md)
   * [docker](./docs/DevOps/docker.md)
   * [K8S](./docs/DevOps/docker.md)
   * [微服务](./docs/DevOps/micro-services.md)
