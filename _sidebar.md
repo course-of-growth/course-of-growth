@@ -48,7 +48,7 @@
   * [React](./docs/font/react.md)
 
 * Git
-  * []
+  * [安装之后的配置](./docs/git/config.md)
 
 * 阅读心得
 
