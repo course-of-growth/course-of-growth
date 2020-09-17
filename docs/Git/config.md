@@ -10,7 +10,7 @@ git config --global user.email 'your_email'
 
 缺省等同于 local
 ```
-git config --local   #local 只对某个仓库有效(得在仓库路径下执行)
+git config --local   #local 只对某个仓库有效(得在仓库路径下执行),优先级高于global
 git config --global  #global 用户所有仓库有效
 git config --system  #sysytem 对系统所有登陆的用户有效
 ```
