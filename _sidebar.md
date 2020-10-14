@@ -45,11 +45,11 @@
 
 * 前端
 
-  * [React](./docs/font/react.md)
+  <!-- * [React](./docs/font/react.md) -->
 
 * Git
-  * [初识Git](./docs/git/git-01.md)
-  * [安装之后的配置](./docs/git/config.md)
+  * [初识Git](./docs/Git/git-01.md)
+  * [安装之后的配置](./docs/Git/config.md)
 
 * 阅读心得
 
